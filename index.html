@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Simulateur 3D - Portes de Garage</title>
     <style>
         :root {
@@ -71,6 +71,7 @@
             outline: none;
             background: #f8fafc;
             box-sizing: border-box;
+            -webkit-appearance: none;
         }
         .search-box:focus { border-color: var(--primary-color); background: white; }
 
@@ -86,6 +87,7 @@
             align-items: center;
             cursor: pointer;
             transition: transform 0.2s;
+            -webkit-tap-highlight-color: transparent;
         }
         
         .color-card:hover { transform: translateY(-2px); }
@@ -187,6 +189,52 @@
         .btn-success { background: #10b981; }
         .btn-success:hover { background: #059669; }
 
+        /* =========================================
+           RÈGLES D'ADAPTATION POUR MOBILE (RESPONSIVE)
+           ========================================= */
+        @media (max-width: 850px) {
+            body {
+                flex-direction: column; /* L'image passe en haut, le menu en bas */
+            }
+            
+            .main-content {
+                flex: none;
+                height: 40vh; /* L'image prend 40% de l'écran */
+                padding: 15px;
+            }
+            
+            .sidebar {
+                width: 100%; /* Le menu prend toute la largeur */
+                height: 60vh; /* Le menu prend 60% de l'écran */
+                border-right: none;
+                border-top: 1px solid var(--border-color);
+            }
+            
+            .sidebar-header {
+                padding: 15px 20px;
+            }
+            
+            .sidebar-content {
+                padding: 15px 20px;
+                gap: 15px;
+            }
+            
+            .color-grid {
+                gap: 10px; /* On réduit l'espacement entre les couleurs */
+            }
+            
+            .sidebar-footer {
+                padding: 15px 20px;
+            }
+            
+            .color-swatch {
+                border-radius: 12px; /* Coins un peu moins arrondis sur mobile */
+            }
+            
+            .color-card.active .color-swatch::after {
+                font-size: 20px; /* Coche un peu plus petite */
+            }
+        }
     </style>
 </head>
 <body>
@@ -194,7 +242,7 @@
     <div class="sidebar">
         <div class="sidebar-header">
             <h2>Simulateur Garage</h2>
-            <p>Personalisez plus facilement les garages!</p>
+            <p>Personnalisation de façade</p>
         </div>
 
         <div class="sidebar-content">
@@ -243,7 +291,6 @@
             "RAL 9001 (Blanc crème)": "#EAE6CA", "RAL 9002 (Blanc gris)": "#E7EBDA", "RAL 9003 (Blanc de sécurité)": "#F4F4F4", "RAL 9004 (Noir de sécurité)": "#282828", "RAL 9005 (Noir foncé)": "#0A0A0A", "RAL 9006 (Aluminium blanc)": "#A5A5A5", "RAL 9007 (Aluminium gris)": "#8F8F8F", "RAL 9010 (Blanc pur)": "#F1ECE1", "RAL 9011 (Noir graphite)": "#1C1C1C", "RAL 9016 (Blanc signalisation)": "#F6F6F6", "RAL 9017 (Noir signalisation)": "#1E1E1E", "RAL 9018 (Blanc papyrus)": "#D7D7D7", "RAL 9022 (Gris clair nacré)": "#9C9C9C", "RAL 9023 (Gris foncé nacré)": "#828282"
         };
 
-        // Extraction automatique pour la grille
         const ralColors = Object.entries(ralColorsDict).map(([key, hex]) => {
             const codeMatch = key.match(/RAL (\d{4})/);
             const nameMatch = key.match(/\((.*?)\)/);
@@ -293,8 +340,6 @@
         }
 
         searchInput.addEventListener('input', (e) => renderGrid(e.target.value));
-
-        // Initialisation de la grille
         renderGrid();
 
         // --- LOGIQUE DU CANVAS ---
@@ -315,12 +360,11 @@
             {x: 1895, y: 1015}, {x: 1224, y: 1027}
         ];
 
-        // On s'assure d'utiliser les noms exacts
         img.src = 'photo2.jpg';
         texture.src = 'texture.jpg';
 
-        img.onerror = () => alert("Erreur : Impossible de charger 'photo2.jpg'. Vérifie que le fichier est dans le même dossier.");
-        texture.onerror = () => alert("Erreur : Impossible de charger 'texture.jpg'. Vérifie que le fichier est dans le même dossier.");
+        img.onerror = () => alert("Erreur : Impossible de charger 'photo2.jpg'. Vérifie la casse des lettres.");
+        texture.onerror = () => alert("Erreur : Impossible de charger 'texture.jpg'. Vérifie la casse des lettres.");
 
         function checkLoad() {
             imagesLoaded++;
@@ -349,7 +393,7 @@
         }
 
         function applySimulation() {
-            if (imagesLoaded < 2) return; // Sécurité : on attend que les images soient chargées
+            if (imagesLoaded < 2) return;
             
             drawOriginal();
             
@@ -386,7 +430,6 @@
 
         document.getElementById('resetBtn').addEventListener('click', drawOriginal);
         
-        // Bouton de téléchargement
         document.getElementById('downloadBtn').addEventListener('click', function() {
             if (imagesLoaded < 2) return;
             const link = document.createElement('a');
