@@ -89,7 +89,7 @@
             transition: transform 0.2s;
             -webkit-tap-highlight-color: transparent;
         }
-        
+
         .color-card:hover { transform: translateY(-2px); }
 
         .color-swatch {
@@ -101,12 +101,12 @@
             margin-bottom: 8px;
             position: relative;
         }
-        
+
         .color-card.active .color-swatch {
             border: 3px solid var(--primary-color);
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
-        
+
         .color-card.active .color-swatch::after {
             content: '✓';
             position: absolute;
@@ -189,78 +189,92 @@
         .btn-success { background: #10b981; }
         .btn-success:hover { background: #059669; }
 
-        /* =========================================
-           RÈGLES D'ADAPTATION POUR MOBILE (RESPONSIVE)
-           ========================================= */
         @media (max-width: 850px) {
-            body {
-                flex-direction: column; /* L'image passe en haut, le menu en bas */
-            }
-            
-            .main-content {
-                flex: none;
-                height: 40vh; /* L'image prend 40% de l'écran */
-                padding: 15px;
-            }
-            
-            .sidebar {
-                width: 100%; /* Le menu prend toute la largeur */
-                height: 60vh; /* Le menu prend 60% de l'écran */
-                border-right: none;
-                border-top: 1px solid var(--border-color);
-            }
-            
-            .sidebar-header {
-                padding: 15px 20px;
-            }
-            
-            .sidebar-content {
-                padding: 15px 20px;
-                gap: 15px;
-            }
-            
-            .color-grid {
-                gap: 10px; /* On réduit l'espacement entre les couleurs */
-            }
-            
-            .sidebar-footer {
-                padding: 15px 20px;
-            }
-            
-            .color-swatch {
-                border-radius: 12px; /* Coins un peu moins arrondis sur mobile */
-            }
-            
-            .color-card.active .color-swatch::after {
-                font-size: 20px; /* Coche un peu plus petite */
-            }
+            body { flex-direction: column; }
+            .main-content { flex: none; height: 40vh; padding: 15px; }
+            .sidebar { width: 100%; height: 60vh; border-right: none; border-top: 1px solid var(--border-color); }
+            .sidebar-header { padding: 15px 20px; }
+            .sidebar-content { padding: 15px 20px; gap: 15px; }
+            .color-grid { gap: 10px; }
+            .sidebar-footer { padding: 15px 20px; }
+            .color-swatch { border-radius: 12px; }
+            .color-card.active .color-swatch::after { font-size: 20px; }
         }
+    
+        /* MODAL STYLES */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+        }
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 640px;
+            height: 85vh;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            animation: modalFadeIn 0.3s ease;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .modal-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--surface-color);
+        }
+        .modal-close {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            width: auto;
+            margin: 0;
+        }
+        .modal-close:hover { background: #dc2626; }
     </style>
-</head>
+    </head>
 <body>
 
     <div class="sidebar">
+        
         <div class="sidebar-header">
-            <h2>Simulateur Garage</h2>
-            <p>Personnalisation de garage</p>
+            <h2 style="margin-bottom: 5px;">Simulateur Garage</h2>
+            <p style="margin-bottom: 15px;">Personnalisation de garage</p>
+
+            <div class="section-title" style="margin-bottom: 8px;">Choisir la photo</div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-outline" style="flex: 1; padding: 8px; font-size: 0.85rem; margin: 0;" onclick="loadPhoto('photo2')">Photo 1</button>
+                <button class="btn-outline" style="flex: 1; padding: 8px; font-size: 0.85rem; margin: 0;" onclick="loadPhoto('photo3')">Photo 2</button>
+                
+            </div>
         </div>
 
+
         <div class="sidebar-content">
-            <div>
-                
-            <div>
-                <div class="section-title">Choisir la photo</div>
-                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                    <button class="btn-outline" style="flex: 1;" onclick="loadPhoto('photo2')">Photo 1</button>
-                    <button class="btn-outline" style="flex: 1;" onclick="loadPhoto('photo3')">Photo 2</button>
-                </div>
-            </div>
-<div class="section-title">Nuancier RAL Classic</div>
-                <input type="text" id="searchInput" class="search-box" placeholder="Rechercher (ex: 7016, Rouge...)">
-                
-                <div class="color-grid" id="colorGrid"></div>
-            </div>
-            
+
+
+            <div class="section-title">Nuancier RAL Classic</div>
+            <input type="text" id="searchInput" class="search-box" placeholder="Rechercher (ex: 7016, Rouge...)">
+
+            <div class="color-grid" id="colorGrid"></div>
+
             <div style="margin-top:auto; padding-top: 20px; border-top: 1px solid #e2e8f0;">
                 <label style="font-size: 0.8rem; font-weight:bold; color: #64748b; margin-bottom: 8px; display:block;">COULEUR SÉLECTIONNÉE :</label>
                 <div style="display:flex; align-items:center; gap: 12px;">
@@ -270,6 +284,8 @@
                         <div id="selectedColorName" style="font-size: 0.8rem; color: #64748b;">Gris anthracite</div>
                     </div>
                 </div>
+
+
             </div>
         </div>
 
@@ -279,14 +295,23 @@
         </div>
     </div>
 
-    <div class="main-content">
+    <div class="main-content" style="flex-direction: column; gap: 20px;">
         <div class="canvas-container">
             <canvas id="myCanvas"></canvas>
+        </div>
+
+        <!-- NOUVEAU BOUTON SOUS L'IMAGE -->
+        <div id="voteActionContainer" style="display: none; text-align: center; width: 100%; max-width: 350px; z-index: 10;">
+            <button id="voteBtn" class="btn-success" style="padding: 16px; font-size: 1.1rem; width: 100%; border-radius: 12px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);">
+                ❤️ J'aime cette couleur
+            </button>
+            <div style="font-size: 0.8rem; color: #64748b; margin-top: 8px;">
+                Enregistre ton choix dans le sondage Google Forms
+            </div>
         </div>
     </div>
 
     <script>
-        // La base complète des 213 RAL, traduite en Français
         const ralColorsDict = {
             "RAL 1000 (Beige vert)": "#CDBA88", "RAL 1001 (Beige)": "#D0B084", "RAL 1002 (Jaune sable)": "#D2AA6D", "RAL 1003 (Jaune de sécurité)": "#F9A800", "RAL 1004 (Jaune or)": "#E49E00", "RAL 1005 (Jaune miel)": "#CB8E00", "RAL 1006 (Jaune maïs)": "#E29000", "RAL 1007 (Jaune narcisse)": "#E88C00", "RAL 1011 (Beige brun)": "#AF8A54", "RAL 1012 (Jaune citron)": "#E3A72F", "RAL 1013 (Blanc perlé)": "#E3D9C6", "RAL 1014 (Ivoire)": "#DFCEA1", "RAL 1015 (Ivoire clair)": "#E6D2B5", "RAL 1016 (Jaune soufre)": "#EDEA00", "RAL 1017 (Jaune safran)": "#F5D033", "RAL 1018 (Jaune zinc)": "#F8CB2E", "RAL 1019 (Beige gris)": "#A48F7A", "RAL 1020 (Jaune olive)": "#9A9464", "RAL 1021 (Jaune colza)": "#F3D03E", "RAL 1023 (Jaune signalisation)": "#F6B600", "RAL 1024 (Jaune ocre)": "#BA9B62", "RAL 1026 (Jaune brillant)": "#FFFF00", "RAL 1027 (Jaune curry)": "#A77F0E", "RAL 1028 (Jaune melon)": "#FF9B00", "RAL 1032 (Jaune genêt)": "#E2A300", "RAL 1033 (Jaune dahlia)": "#F99A1C", "RAL 1034 (Jaune pastel)": "#EB9C52", "RAL 1035 (Beige nacré)": "#908370", "RAL 1036 (Or nacré)": "#80643F", "RAL 1037 (Jaune soleil)": "#F09200",
             "RAL 2000 (Orangé jaune)": "#ED760E", "RAL 2001 (Orangé rouge)": "#C93C20", "RAL 2002 (Vermillon)": "#CB2821", "RAL 2003 (Orangé pastel)": "#FF7514", "RAL 2004 (Orangé pur)": "#F44611", "RAL 2005 (Orangé brillant)": "#FF2301", "RAL 2007 (Orangé clair brillant)": "#FFA420", "RAL 2008 (Orangé rouge clair)": "#F75E25", "RAL 2009 (Orangé signalisation)": "#F54021", "RAL 2010 (Orangé de sécurité)": "#D84B20", "RAL 2011 (Orangé foncé)": "#EC7C26", "RAL 2012 (Orangé saumon)": "#E55137", "RAL 2013 (Orangé nacré)": "#C35831",
@@ -311,13 +336,12 @@
 
         const colorGrid = document.getElementById('colorGrid');
         const searchInput = document.getElementById('searchInput');
-        
-        let selectedColorHex = "#373F43"; // Gris anthracite par défaut
+        let selectedColorHex = "#373F43";
 
         function renderGrid(filter = "") {
             colorGrid.innerHTML = "";
             const term = filter.toLowerCase();
-            
+
             ralColors.forEach(ral => {
                 if (ral.code.includes(term) || ral.name.toLowerCase().includes(term)) {
                     const card = document.createElement('div');
@@ -336,13 +360,15 @@
 
         function selectColor(code, name, hex, cardElement) {
             selectedColorHex = hex;
-            
             document.querySelectorAll('.color-card').forEach(c => c.classList.remove('active'));
             if(cardElement) cardElement.classList.add('active');
-            
+
             document.getElementById('selectedColorPreview').style.backgroundColor = hex;
             document.getElementById('selectedColorCode').innerText = `RAL ${code}`;
             document.getElementById('selectedColorName').innerText = name;
+
+            // Fait apparaître le bouton de vote sous l'image
+            document.getElementById('voteActionContainer').style.display = 'block';
 
             applySimulation(); 
         }
@@ -350,15 +376,36 @@
         searchInput.addEventListener('input', (e) => renderGrid(e.target.value));
         renderGrid();
 
-        // --- LOGIQUE DU CANVAS ---
+        // --- LOGIQUE DE VOTE GOOGLE FORMS ---
+        document.getElementById('voteBtn').addEventListener('click', () => {
+            const currentCode = document.getElementById('selectedColorCode').innerText;
+            const currentName = document.getElementById('selectedColorName').innerText;
+
+            // On combine le code et le nom (ex: "RAL 7016 - Gris anthracite")
+            const fullColorName = `${currentCode} - ${currentName}`;
+
+            // On encode le texte pour qu'il soit compatible avec une URL (espaces -> %20)
+            const encodedColor = encodeURIComponent(fullColorName);
+
+            // Lien fourni par l'utilisateur avec remplacement du mot TEST
+            const googleFormUrl = `https://docs.google.com/forms/d/e/1FAIpQLScV2fFRJQSf_iIyardWKzuckVJczMin1JN3BtjqTa6H2Jq0Sg/viewform?usp=pp_url&entry.399899874=${encodedColor}`;
+
+            // Ouverture dans un nouvel onglet
+            
+            // Affichage dans l'iframe
+            const iframe = document.getElementById('googleFormIframe');
+            iframe.src = googleFormUrl;
+            document.getElementById('voteModal').style.display = 'flex';
+
+        });
+
+        // --- CANVAS RENDERING (RÉSILIANT) ---
         const canvas = document.getElementById('myCanvas');
         const ctx = canvas.getContext('2d');
-        
+
         let img = new Image();
         let texture = new Image();
-        let imagesLoaded = 0;
 
-        
         const photos = {
             'photo2': {
                 src: 'photo2.jpg',
@@ -383,29 +430,35 @@
 
         let currentPhoto = 'photo2';
 
-        function loadPhoto(photoKey) {
-            currentPhoto = photoKey;
-            imagesLoaded = 1; 
-            img.src = photos[currentPhoto].src;
-        }
+        // L'astuce pour forcer l'affichage sans se soucier du cache:
+        // on dessine la photo dès qu'elle est prête, et on ajoute le masque si la texture est prête aussi.
+        let isTextureReady = false;
 
-
-        
+        texture.onload = () => {
+            isTextureReady = true;
+            applySimulation(); // Tente d'appliquer le masque si l'image principale est déjà là
+        };
+        texture.onerror = () => console.error("Erreur texture");
         texture.src = 'texture.jpg';
 
-        img.onerror = () => alert("Erreur : Impossible de charger 'photo2.jpg'. Vérifie la casse des lettres.");
-        texture.onerror = () => alert("Erreur : Impossible de charger 'texture.jpg'. Vérifie la casse des lettres.");
-
-        function checkLoad() {
-            imagesLoaded++;
-            if (imagesLoaded === 2) {
-                drawOriginal();
+        img.onload = () => {
+            drawOriginal(); // L'image de fond est affichée IMMÉDIATEMENT !
+            if (isTextureReady) {
                 applySimulation();
             }
-        }
+        };
+        img.onerror = () => alert("Erreur de chargement de la photo : " + photos[currentPhoto].src);
 
-        img.onload = checkLoad;
-        texture.onload = checkLoad;
+        // Lance le chargement initial
+        img.src = photos[currentPhoto].src;
+
+        function loadPhoto(photoKey) {
+            currentPhoto = photoKey;
+            // On clear le canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // On charge la nouvelle image
+            img.src = photos[currentPhoto].src;
+        }
 
         function drawOriginal() {
             canvas.width = img.width;
@@ -424,54 +477,71 @@
         }
 
         function applySimulation() {
-            if (imagesLoaded < 2) return;
-            
-            drawOriginal();
-            
-            function applyToDoor(points) {
-                ctx.save();
-                
-                createMask(points);
-                ctx.clip();
-                
-                const xs = points.map(p => p.x);
-                const ys = points.map(p => p.y);
-                const minX = Math.min(...xs);
-                const minY = Math.min(...ys);
-                const maxX = Math.max(...xs);
-                const maxY = Math.max(...ys);
-                const width = maxX - minX;
-                const height = maxY - minY;
-                
-                ctx.fillStyle = selectedColorHex;
-                ctx.fill();
-                
-                ctx.globalCompositeOperation = 'multiply';
-                ctx.drawImage(texture, minX, minY, width, height);
-                
-                ctx.globalCompositeOperation = 'source-over';
-                ctx.fillStyle = selectedColorHex;
-                ctx.globalAlpha = 0.28; 
-                ctx.fill();
+            if (!img.complete || !isTextureReady || img.width === 0) return;
 
-                ctx.restore();
+            drawOriginal();
+
+            function applyToDoor(points) {
+                try {
+                    ctx.save();
+
+                    createMask(points);
+                    ctx.clip();
+
+                    const xs = points.map(p => p.x);
+                    const ys = points.map(p => p.y);
+                    const minX = Math.min(...xs);
+                    const minY = Math.min(...ys);
+                    const maxX = Math.max(...xs);
+                    const maxY = Math.max(...ys);
+                    const width = maxX - minX;
+                    const height = maxY - minY;
+
+                    ctx.fillStyle = selectedColorHex;
+                    ctx.fill();
+
+                    ctx.globalCompositeOperation = 'multiply';
+                    ctx.drawImage(texture, minX, minY, width, height);
+
+                    ctx.globalCompositeOperation = 'source-over';
+                    ctx.fillStyle = selectedColorHex;
+                    ctx.globalAlpha = 0.28; 
+                    ctx.fill();
+
+                    ctx.restore();
+                } catch(e) { console.error("Erreur de dessin porte", e); }
             }
 
-            photos[currentPhoto].doors.forEach(door => applyToDoor(door));
+            if (photos[currentPhoto] && photos[currentPhoto].doors) {
+                photos[currentPhoto].doors.forEach(door => applyToDoor(door));
+            }
         }
 
         document.getElementById('resetBtn').addEventListener('click', drawOriginal);
-        
+
         document.getElementById('downloadBtn').addEventListener('click', function() {
-            if (imagesLoaded < 2) return;
+            if (!img.complete) return;
             const link = document.createElement('a');
             link.download = 'simulation_garage.png';
             link.href = canvas.toDataURL('image/png');
             link.click();
         });
-    
-        img.src = photos[currentPhoto].src;
     </script>
-</body>
 
+    <!-- MODAL IFRAME GOOGLE FORMS -->
+    <div id="voteModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="margin: 0; font-size: 1.1rem;">Validation du vote</h3>
+                <button class="modal-close" onclick="document.getElementById('voteModal').style.display='none'">Fermer</button>
+            </div>
+            <div style="background: #e0f2fe; color: #0369a1; padding: 10px 20px; font-size: 0.9rem; font-weight: 500; text-align: center; border-bottom: 1px solid #bae6fd;">
+                💡 N'oublie pas d'appuyer sur <b>Envoyer</b> ci-dessous pour nous soumettre ton avis !
+            </div>
+            <!-- L'iframe chargera le Google Form -->
+            <iframe id="googleFormIframe" src="" style="width: 100%; height: 100%; border: none;"></iframe>
+        </div>
+    </div>
+
+</body>
 </html>
